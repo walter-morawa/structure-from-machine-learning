@@ -35,7 +35,7 @@ RUN conda create -n myenv python=3.12
 SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"] 
 
 # Manually run conda clean with the correct flag (update the path if needed)
-RUN conda run -n myenv conda clean -tipsy 
+#RUN conda run -n myenv conda clean -tipsy 
 
 # Install OpenSfM and Ceres with Conda 
 RUN conda run -n myenv conda install -c conda-forge opensfm 
