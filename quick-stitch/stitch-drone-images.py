@@ -3,11 +3,15 @@ import opensfm
 import numpy as np
 import os
 
-def stitch_drone_images(image_paths):
+def stitch_drone_images(image_paths, max_width=800):
     # 1. Feature Detection and Matching (OpenCV)
     keypoints, descriptors = [], []
     for path in image_paths:
         img = cv2.imread(path)
+        # Resize image
+        # do not pass max_width parameter if you want to process at full resolution
+        height = int(img.shape[0] * max_width / img.shape[1]) 
+        img = cv2.resize(img, (max_width, height))
         kp, des = cv2.SIFT_create().detectAndCompute(img, None)  # or ORB or AKAZE
         keypoints.append(kp)
         descriptors.append(des)
