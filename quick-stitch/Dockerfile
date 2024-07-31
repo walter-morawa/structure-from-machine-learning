@@ -26,11 +26,14 @@ RUN apt-get update \
 RUN curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
     && bash /tmp/miniconda.sh -b -p /opt/conda \
     && rm /tmp/miniconda.sh
-    && echo "About to run: /opt/conda/bin/conda clean -tipsy"  # Add this line
-    && /opt/conda/bin/conda clean -tipsy \
-    && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
-    && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc   
- 
+\
+
+# Print the message about the upcoming conda clean command
+RUN echo "About to run: /opt/conda/bin/conda clean -tipsy"
+
+# Manually run conda clean with the correct flag
+RUN /opt/conda/bin/conda clean -tipsy 
+
 # Set up a Conda environment
 ENV PATH="/opt/conda/bin:$PATH"
 RUN conda create -n myenv python=3.12 
