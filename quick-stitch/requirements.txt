@@ -1,0 +1,4 @@
+opencv-python
+numpy
+opensfm # OpenSfM (install separately using Conda: conda install -c conda-forge opensfm)
+
