@@ -26,9 +26,6 @@ RUN apt-get update \
 WORKDIR /app
 RUN git clone --recursive https://github.com/mapillary/OpenSfM.git
 
-# Clone SfML GitHub repository (to get the sample dataset)
-WORKDIR /app
-RUN git clone https://github.com/walter-morawa/structure-from-machine-learning.git sample-dataset 
 
 
 # Build and install OpenSfM
@@ -40,6 +37,11 @@ RUN pip3 install -r requirements.txt && \
 # Install quick-stitch dependencies (if any additional ones are needed)
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
+
+# Clone SfML GitHub repository (to get the sample dataset)
+WORKDIR /app
+RUN git clone https://github.com/walter-morawa/structure-from-machine-learning.git sample-dataset 
+
 
 # Copy your quick-stitch project files 
 COPY . .
