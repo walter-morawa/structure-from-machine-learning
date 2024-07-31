@@ -22,7 +22,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install Miniconda (lightweight Conda distribution)
+# Install Miniconda
 RUN curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
     && bash /tmp/miniconda.sh -b -p /opt/conda \
     && rm /tmp/miniconda.sh \
@@ -32,18 +32,16 @@ RUN curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.
 
 # Set up a Conda environment
 ENV PATH="/opt/conda/bin:$PATH"
-RUN conda create -n myenv python=3.12  # Create an environment named 'myenv' with Python 3.12
+RUN conda create -n myenv python=3.12 
 SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"] 
 
-# Install OpenSfM and Ceres with Conda (adjust as needed)
+# Install OpenSfM and Ceres with Conda 
 RUN conda install -c conda-forge opensfm 
 RUN conda install -c conda-forge 'ceres=2.1.0' 'ceres-solver-suitesparse' lapack 'suitesparse=5.10'
 
+# Clone your GitHub repository
 WORKDIR /app
-
-# Copy your project files
-COPY requirements.txt .
-COPY . .
+RUN git clone https://github.com/walter-morawa/structure-from-machine-learning.git . 
 
 # Install other dependencies using pip within the Conda environment
 RUN pip install --no-cache-dir -r requirements.txt
