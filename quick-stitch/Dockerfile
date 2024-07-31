@@ -31,9 +31,6 @@ RUN curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.
 # Print the message about the upcoming conda clean command
 RUN '/opt/conda/bin/conda clean -tipsy'  # Enclose in single quotes
 
-# Manually run conda clean with the correct flag
-RUN /opt/conda/bin/conda clean -tipsy 
-
 # Set up a Conda environment
 ENV PATH="/opt/conda/bin:$PATH"
 RUN conda create -n myenv python=3.12 
