@@ -13,6 +13,8 @@ pip install -r requirements.txt  # Install packages
 ```
 # Update pip if necessary
 ```python -m pip install --upgrade pip setuptools wheel```
+```python -m pip install --upgrade setuptools```
+
 
 # if issues with PyYaml
 Windows
