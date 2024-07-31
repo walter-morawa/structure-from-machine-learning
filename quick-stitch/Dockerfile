@@ -26,7 +26,7 @@ RUN apt-get update \
 RUN curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
     && bash /tmp/miniconda.sh -b -p /opt/conda \
     && rm /tmp/miniconda.sh
-\
+
 
 # Print the message about the upcoming conda clean command
 RUN echo "About to run: /opt/conda/bin/conda clean -tipsy"
