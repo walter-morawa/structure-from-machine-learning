@@ -25,20 +25,22 @@ RUN apt-get update \
 # Install Miniconda
 RUN curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
     && bash /tmp/miniconda.sh -b -p /opt/conda \
-    && rm /tmp/miniconda.sh as before_conda_clean
+    && rm /tmp/miniconda.sh
 
 
-# Print the message about the upcoming conda clean command
-RUN '/opt/conda/bin/conda clean -tipsy' 
 
 # Set up a Conda environment
 ENV PATH="/opt/conda/bin:$PATH"
 RUN conda create -n myenv python=3.12 
 SHELL ["conda", "run", "-n", "myenv", "/bin/bash", "-c"] 
 
+# Manually run conda clean with the correct flag (update the path if needed)
+RUN conda run -n myenv conda clean -tipsy 
+
 # Install OpenSfM and Ceres with Conda 
-RUN conda install -c conda-forge opensfm 
-RUN conda install -c conda-forge 'ceres=2.1.0' 'ceres-solver-suitesparse' lapack 'suitesparse=5.10'
+RUN conda run -n myenv conda install -c conda-forge opensfm 
+RUN conda run -n myenv conda install -c conda-forge 'ceres=2.1.0' 'ceres-solver-suitesparse' lapack 'suitesparse=5.10'
+
 
 # Clone your GitHub repository
 WORKDIR /app
