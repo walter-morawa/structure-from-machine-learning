@@ -25,7 +25,7 @@ RUN apt-get update \
 # Install Miniconda
 RUN curl -sL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh \
     && bash /tmp/miniconda.sh -b -p /opt/conda \
-    && rm /tmp/miniconda.sh
+    && rm /tmp/miniconda.sh as before_conda_clean
 
 
 # Print the message about the upcoming conda clean command
