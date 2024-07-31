@@ -43,4 +43,4 @@ RUN git clone https://github.com/walter-morawa/structure-from-machine-learning.g
 COPY . .
 
 # Command to run your application 
-CMD ["python3", "main.py"] 
+CMD ["python3", "structure-from-machine-learning/quick-stitch/main.py"] 
