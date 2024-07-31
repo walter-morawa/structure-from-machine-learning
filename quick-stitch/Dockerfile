@@ -45,4 +45,4 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 # Command to run your application 
-CMD ["python", "main.py"] 
+CMD ["python3", "main.py"] 
