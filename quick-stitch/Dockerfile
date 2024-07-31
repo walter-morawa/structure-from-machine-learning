@@ -34,9 +34,6 @@ RUN pip3 install -r requirements.txt && \
     python3 setup.py build && \
     python3 setup.py install 
 
-# Install quick-stitch dependencies (if any additional ones are needed)
-COPY requirements.txt .
-RUN pip3 install -r requirements.txt
 
 # Clone SfML GitHub repository (to get the sample dataset)
 WORKDIR /app
