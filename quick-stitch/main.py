@@ -1,5 +1,6 @@
 import cv2
 from stitch_drone_images import stitch_drone_images  # Import your function
+import os
 
 def main():
     image_dir = "../sample-dataset/demo" # test on demo first then fulldataset- dataset
