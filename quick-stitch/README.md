@@ -1,4 +1,12 @@
-# Installing Dependencies
+# Installing Dependencies with Docker
+
+```docker build -t quick-stitch .```
+
+# Run the Docker container
+```docker run -v /path/to/your/drone/images:/app/images quick-stitch```
+
+
+# Installing Dependencies locally
 ```pip install -r requirements.txt```
 or
 ```python3 -m pip install -r requirements.txt```
