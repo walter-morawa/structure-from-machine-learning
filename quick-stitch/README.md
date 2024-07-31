@@ -34,6 +34,9 @@ During installation, ensure you select the "Desktop development with C++" worklo
 # bash
 ```pip install Cython --no-binary :all:```
 
+# to install opensfm
+```https://opensfm.org/docs/building.html```
+
 
 
 
