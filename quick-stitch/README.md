@@ -7,7 +7,8 @@ or
 
 ```
 python -m venv myenv    # Create a virtual environment
-source myenv/bin/activate  # Activate it
+source myenv/bin/activate  # Activate virtual environment
+# source myenv/Scripts/activate if using windows
 pip install -r requirements.txt  # Install packages
 ```
 
