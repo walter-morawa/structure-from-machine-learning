@@ -5,6 +5,9 @@ import opensfm
 import numpy as np
 import os
 import time  # Import time for time tracking
+from opensfm import reconstruction as rc  # Import the reconstruction module
+from opensfm import io  # Import the io module for camera models
+from opensfm import pygeometry as pg
 
 def find_matches(descriptors):
     """
@@ -67,22 +70,22 @@ def create_opensfm_reconstruction(image_paths, keypoints, matches, homographies)
     """
 
     # Create a new reconstruction object
-    reconstruction = opensfm.types.Reconstruction()
+    reconstruction = rc.Reconstruction()
 
     # Add cameras (assuming a simple perspective camera model for now)
     for i in range(len(image_paths)):
-        camera = opensfm.types.PerspectiveCamera()
-        camera.id = f"camera_{i}"
-        camera.width = keypoints[i][0].pt[0] * 2 # Assuming keypoints are centered
-        camera.height = keypoints[i][0].pt[1] * 2
+        camera = io.cameras.perspective_camera()  # Use io.cameras to create a perspective camera
+        camera.id = str(i)  # Camera IDs should be strings
+        camera.width = int(keypoints[i][0].pt[0] * 2)  # Assuming keypoints are centered, convert to int
+        camera.height = int(keypoints[i][0].pt[1] * 2)
         reconstruction.add_camera(camera)
 
     # Add shots (images)
     for i, path in enumerate(image_paths):
-        shot = opensfm.types.Shot()
-        shot.id = f"shot_{i}"
-        shot.camera = reconstruction.cameras[f"camera_{i}"]
-        shot.pose = opensfm.types.Pose()  # Initialize with identity pose
+        shot = rc.Shot()  # Use rc.Shot to create a shot
+        shot.id = str(i)   # Shot IDs should also be strings
+        shot.camera = reconstruction.cameras[str(i)]
+        shot.pose = rc.Pose()  # Initialize with identity pose
         if i > 0:  # Set initial pose based on homographies (except for the first image)
             shot.pose.set_from_matrix(homographies[i - 1])
         reconstruction.add_shot(shot)
@@ -93,28 +96,27 @@ def create_opensfm_reconstruction(image_paths, keypoints, matches, homographies)
         for match in matches[i]:
             # Create a new 3D point if it doesn't exist yet
             if match.queryIdx not in reconstruction.points:
-                point = opensfm.types.Point()
-                point.id = next_point_id
+                point = rc.Point()  # Use rc.Point to create a point
+                point.id = str(next_point_id)  # Point IDs should be strings
                 point.coordinates = np.zeros(3)  # Initialize with dummy coordinates
                 reconstruction.add_point(point)
                 next_point_id += 1
 
             # Add observations (2D projections) of the point in both images
-            observation1 = opensfm.types.Observation()
-            observation1.id = f"shot_{i}"
-            observation1.point = match.queryIdx
+            observation1 = rc.Observation()  # Use rc.Observation to create an observation
+            observation1.id = str(i)
+            observation1.point = str(match.queryIdx)  # Point IDs are strings now
             observation1.projection = keypoints[i][match.queryIdx].pt
 
-            observation2 = opensfm.types.Observation()
-            observation2.id = f"shot_{i + 1}"
-            observation2.point = match.queryIdx
+            observation2 = rc.Observation()
+            observation2.id = str(i + 1)
+            observation2.point = str(match.queryIdx)
             observation2.projection = keypoints[i + 1][match.trainIdx].pt
 
             reconstruction.add_observation(observation1)
             reconstruction.add_observation(observation2)
 
     return reconstruction
-
 
 def extract_homographies_from_opensfm(reconstruction):
     """
@@ -128,7 +130,7 @@ def extract_homographies_from_opensfm(reconstruction):
     """
 
     # Reference (anchor) image/shot
-    reference_shot_id = reconstruction.reference.shot_id  # Assuming you have a reference shot set
+    reference_shot_id = reconstruction.reference.shot_id 
 
     homographies = []
     for shot in reconstruction.shots.values():
@@ -137,11 +139,11 @@ def extract_homographies_from_opensfm(reconstruction):
         else:
             # Compute homography that warps this shot into the reference shot's coordinate system
             relative_pose = shot.pose.relative_to(reconstruction.shots[reference_shot_id].pose)
-            H = relative_pose.get_homography_matrix() 
+            H = pg.pose_to_homography(relative_pose)  # Use pygeometry.pose_to_homography
             homographies.append(H)
 
     return homographies
-
+    
 def warp_and_blend(image_paths, homographies):
     """
     Warps and blends images based on the provided homographies.
