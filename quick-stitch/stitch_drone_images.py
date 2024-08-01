@@ -8,6 +8,8 @@ import time  # Import time for time tracking
 from opensfm import reconstruction # Import the reconstruction module
 from opensfm import io  # Import the io module for camera models
 from opensfm import pygeometry 
+from opensfm.dataset import DataSet  # Import the DataSet class
+
 
 def find_matches(descriptors):
     """
