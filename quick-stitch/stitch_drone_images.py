@@ -1,4 +1,6 @@
 import cv2
+import sys
+print(sys.path)
 import opensfm
 import numpy as np
 import os
