@@ -1,13 +1,9 @@
 import cv2
-import sys
-print(sys.path)
 import opensfm
 import numpy as np
 import os
 import time  # Import time for time tracking
-from opensfm import reconstruction as rc  # Import the reconstruction module
-from opensfm import io  # Import the io module for camera models
-from opensfm import pygeometry as pg
+
 
 def find_matches(descriptors):
     """
@@ -70,7 +66,7 @@ def create_opensfm_reconstruction(image_paths, keypoints, matches, homographies)
     """
 
     # Create a new reconstruction object
-    reconstruction = rc.Reconstruction()
+    reconstruction = opensfm.Reconstruction()
 
     # Add cameras (assuming a simple perspective camera model for now)
     for i in range(len(image_paths)):
@@ -143,7 +139,7 @@ def extract_homographies_from_opensfm(reconstruction):
             homographies.append(H)
 
     return homographies
-    
+
 def warp_and_blend(image_paths, homographies):
     """
     Warps and blends images based on the provided homographies.
