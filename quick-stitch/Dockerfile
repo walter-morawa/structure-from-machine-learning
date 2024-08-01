@@ -37,7 +37,7 @@ RUN pip3 install -r requirements.txt && \
 
 # Clone SfML GitHub repository (to get the sample dataset)
 WORKDIR /app
-RUN git clone https://github.com/walter-morawa/structure-from-machine-learning.git 
+RUN git clone https://github.com/walter-morawa/structure-from-machine-learning.git AS repository
 
 # Copy your quick-stitch project files 
 COPY . .
