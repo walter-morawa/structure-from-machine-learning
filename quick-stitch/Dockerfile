@@ -39,6 +39,9 @@ RUN pip3 install -r requirements.txt && \
 WORKDIR /app
 RUN git clone https://github.com/walter-morawa/structure-from-machine-learning.git 
 
+# Create the opensfm_data directory
+RUN mkdir opensfm_data
+
 # Copy your quick-stitch project files 
 COPY . .
 

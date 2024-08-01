@@ -1,9 +1,13 @@
 import cv2
+import sys
+print(sys.path)
 import opensfm
 import numpy as np
 import os
 import time  # Import time for time tracking
-
+from opensfm import reconstruction # Import the reconstruction module
+from opensfm import io  # Import the io module for camera models
+from opensfm import pygeometry 
 
 def find_matches(descriptors):
     """
@@ -65,9 +69,20 @@ def create_opensfm_reconstruction(image_paths, keypoints, matches, homographies)
         An OpenSfM reconstruction object ready for bundle adjustment.
     """
 
-    # Create a new reconstruction object
-    reconstruction = opensfm.Reconstruction()
+    # 3. OpenSfM Integration
+    print("Performing bundle adjustment with OpenSfM...")
+    data_path = "/app/opensfm_data"
 
+     # Create an OpenSfM dataset object 
+    data = DataSet(data_path)  # You'll need to provide the appropriate data_path
+
+    # Create a TracksManager (you'll need to implement this based on your matches)
+    tracks_manager = create_tracks_manager(matches)  
+    # Perform incremental reconstruction     Create a new reconstruction object
+    report, reconstructions = reconstruction.incremental_reconstruction(data, tracks_manager)
+
+    # Extract the reconstructed scene (assuming you only have one reconstruction)
+    reconstruction = reconstructions[0]
     # Add cameras (assuming a simple perspective camera model for now)
     for i in range(len(image_paths)):
         camera = io.cameras.perspective_camera()  # Use io.cameras to create a perspective camera
@@ -139,7 +154,7 @@ def extract_homographies_from_opensfm(reconstruction):
             homographies.append(H)
 
     return homographies
-
+    
 def warp_and_blend(image_paths, homographies):
     """
     Warps and blends images based on the provided homographies.
